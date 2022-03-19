@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using CqrsMediatrExample.Data;
+
 namespace CqrsMediatrExample
 {
     public class Startup
@@ -27,6 +29,8 @@ namespace CqrsMediatrExample
         {
             // setup MediatR
             services.AddMediatR(typeof(Startup));
+
+            services.AddSingleton<FakeDataStore>();
             services.AddControllers();
 
         }
