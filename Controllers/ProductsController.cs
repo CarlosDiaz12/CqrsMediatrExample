@@ -1,4 +1,6 @@
-﻿using CqrsMediatrExample.Queries;
+﻿using CqrsMediatrExample.Commands;
+using CqrsMediatrExample.Models;
+using CqrsMediatrExample.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +22,20 @@ namespace CqrsMediatrExample.Controllers
         public async Task<ActionResult> GetProducts()
         {
             var response = await _mediator.Send(new GetProductsQuery());
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddProduct([FromBody] AddProductCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return CreatedAtRoute("GetProductById", new { productId = response.Id }, response);
+        }
+
+        [HttpGet("{productId}", Name = "GetProductById")]
+        public async Task<ActionResult> GetProductById(int productId)
+        {
+            var response = await _mediator.Send(new GetProductByIdQuery { ProductId = productId});
             return Ok(response);
         }
     }
