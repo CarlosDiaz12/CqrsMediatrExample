@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using CqrsMediatrExample.Data;
+using CqrsMediatrExample.Behaviors;
 
 namespace CqrsMediatrExample
 {
@@ -31,6 +32,9 @@ namespace CqrsMediatrExample
             services.AddMediatR(typeof(Startup));
 
             services.AddSingleton<FakeDataStore>();
+
+            // register Mediatr Behavior
+            services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddControllers();
 
         }
