@@ -1,5 +1,6 @@
 ﻿using CqrsMediatrExample.Commands;
 using CqrsMediatrExample.Models;
+using CqrsMediatrExample.Notifications;
 using CqrsMediatrExample.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,7 @@ namespace CqrsMediatrExample.Controllers
         public async Task<ActionResult> AddProduct([FromBody] AddProductCommand command)
         {
             var response = await _mediator.Send(command);
+            await _mediator.Publish(new ProductAddedNotification { Product = response });
             return CreatedAtRoute("GetProductById", new { productId = response.Id }, response);
         }
 
